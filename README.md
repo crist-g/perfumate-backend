@@ -1,3 +1,51 @@
+# Ecommerce Perfúmate
+
+## Configuración del Backend (API)
+
+El backend maneja la base de datos (MariaDB), la autenticación de usuarios mediante tokens y provee los datos de los productos.
+
+preparar el entorno:
+
+```bash
+cd perfumeria-backend
+composer install
+cp .env.example .env
+php artisan key:generate
+```
+
+### Base de datos y carga inicial (Seeders)
+Crea la base de datos, confirua el env, ejecuta el comando de migrate para construir las tablas y correr los Seeders datos de prueba:
+
+```bash
+php artisan migrate:fresh --seed
+```
+> **Nota:** Este comando (`migrate:fresh`) borra cualquier tabla anterior, crea la estructura desde cero y el flag (`--seed`) inyecta los perfumes iniciales y los usuarios (un administrador y un cliente genérico).
+
+
+### Solución para Imágenes del Vendedor 
+Cuando un Administrador añade un nuevo perfume, la imagen se queda en privado. Para que el frontend tenga permiso de mostrarlas sin recibir un `Error 403 (Forbidden)`, se crea un puente público ejecutando:
+
+```bash
+php artisan storage:link
+```
+
+### Dar permisos de Administrador a un usuario nuevo
+Si quieres ascender a alguien a administrador se hace mediante la base de datos, 1 = admin, 0 = usuario.
+
+```sql
+UPDATE users SET role = 1 WHERE email = 'correo;
+```
+
+### Iniciar el servidor Backend
+El backend se ejecuta en el puerto `8000` para que la pasarela de pago y las peticiones del frontend funcionen correctamente:
+
+```bash
+php artisan serve
+```
+La API estará escuchando en: `http://127.0.0.1:8000`
+
+---
+
 <p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
 
 <p align="center">
